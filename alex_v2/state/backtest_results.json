@@ -1,0 +1,572 @@
+{
+  "ADAUSDT": {
+    "mean_reversion": {
+      "trades": 55,
+      "win_rate": 27.27272727272727,
+      "pnl": -479.276,
+      "sharpe": -5.233114807176927,
+      "max_dd": 20.2026887801594
+    },
+    "trend_following": {
+      "trades": 11,
+      "win_rate": 18.181818181818183,
+      "pnl": -125.5714,
+      "sharpe": -2.358124550114939,
+      "max_dd": 3.86453656347343
+    },
+    "breakout": {
+      "trades": 0,
+      "win_rate": 0.0,
+      "pnl": 0.0,
+      "sharpe": 0.0,
+      "max_dd": 0.0
+    },
+    "vwap_scalp": {
+      "trades": 7,
+      "win_rate": 28.57142857142857,
+      "pnl": -132.5173,
+      "sharpe": -1.7031521340101752,
+      "max_dd": 2.134328842701525
+    }
+  },
+  "AVAXUSDT": {
+    "mean_reversion": {
+      "trades": 55,
+      "win_rate": 29.09090909090909,
+      "pnl": -318.0527,
+      "sharpe": -4.80407009304855,
+      "max_dd": 22.81711227260148
+    },
+    "trend_following": {
+      "trades": 11,
+      "win_rate": 18.181818181818183,
+      "pnl": -131.9495,
+      "sharpe": -2.4061036647074894,
+      "max_dd": 4.989002523233484
+    },
+    "breakout": {
+      "trades": 0,
+      "win_rate": 0.0,
+      "pnl": 0.0,
+      "sharpe": 0.0,
+      "max_dd": 0.0
+    },
+    "vwap_scalp": {
+      "trades": 18,
+      "win_rate": 27.77777777777778,
+      "pnl": -215.4704,
+      "sharpe": -2.7165675502616193,
+      "max_dd": 4.488963960680485
+    }
+  },
+  "BNBUSDT": {
+    "mean_reversion": {
+      "trades": 48,
+      "win_rate": 18.75,
+      "pnl": -313.654,
+      "sharpe": -4.539276192281932,
+      "max_dd": 24.943798661569446
+    },
+    "trend_following": {
+      "trades": 12,
+      "win_rate": 0.0,
+      "pnl": -146.7579,
+      "sharpe": -2.463943389125267,
+      "max_dd": 6.535387488265315
+    },
+    "breakout": {
+      "trades": 0,
+      "win_rate": 0.0,
+      "pnl": 0.0,
+      "sharpe": 0.0,
+      "max_dd": 0.0
+    },
+    "vwap_scalp": {
+      "trades": 10,
+      "win_rate": 20.0,
+      "pnl": -90.34949999999999,
+      "sharpe": -1.9924801029857904,
+      "max_dd": 2.225171472865186
+    }
+  },
+  "BTCUSDT": {
+    "mean_reversion": {
+      "trades": 53,
+      "win_rate": 24.528301886792452,
+      "pnl": -266.9167,
+      "sharpe": -4.693927114088304,
+      "max_dd": 28.20621430704372
+    },
+    "trend_following": {
+      "trades": 12,
+      "win_rate": 0.0,
+      "pnl": -155.8278,
+      "sharpe": -2.453300511208599,
+      "max_dd": 7.108926784622945
+    },
+    "breakout": {
+      "trades": 0,
+      "win_rate": 0.0,
+      "pnl": 0.0,
+      "sharpe": 0.0,
+      "max_dd": 0.0
+    },
+    "vwap_scalp": {
+      "trades": 16,
+      "win_rate": 12.5,
+      "pnl": -58.060100000000006,
+      "sharpe": -2.2638412419929193,
+      "max_dd": 3.3632545655205646
+    }
+  },
+  "DOGEUSDT": {
+    "mean_reversion": {
+      "trades": 62,
+      "win_rate": 27.419354838709676,
+      "pnl": -470.697,
+      "sharpe": -5.431742603545825,
+      "max_dd": 22.35719411822879
+    },
+    "trend_following": {
+      "trades": 9,
+      "win_rate": 0.0,
+      "pnl": -131.9965,
+      "sharpe": -2.3478972368161712,
+      "max_dd": 3.7945016977717203
+    },
+    "breakout": {
+      "trades": 0,
+      "win_rate": 0.0,
+      "pnl": 0.0,
+      "sharpe": 0.0,
+      "max_dd": 0.0
+    },
+    "vwap_scalp": {
+      "trades": 8,
+      "win_rate": 25.0,
+      "pnl": -130.4387,
+      "sharpe": -1.8422989165066648,
+      "max_dd": 2.2603276347614885
+    }
+  },
+  "DOTUSDT": {
+    "mean_reversion": {
+      "trades": 58,
+      "win_rate": 31.03448275862069,
+      "pnl": -362.6523,
+      "sharpe": -4.548771264584499,
+      "max_dd": 18.618248471418283
+    },
+    "trend_following": {
+      "trades": 11,
+      "win_rate": 9.090909090909092,
+      "pnl": -210.98160000000001,
+      "sharpe": -2.6204106100216222,
+      "max_dd": 4.53130085286497
+    },
+    "breakout": {
+      "trades": 0,
+      "win_rate": 0.0,
+      "pnl": 0.0,
+      "sharpe": 0.0,
+      "max_dd": 0.0
+    },
+    "vwap_scalp": {
+      "trades": 7,
+      "win_rate": 0.0,
+      "pnl": -164.004,
+      "sharpe": -1.8952900183237278,
+      "max_dd": 2.489377105864369
+    }
+  },
+  "ETHUSDT": {
+    "mean_reversion": {
+      "trades": 46,
+      "win_rate": 32.608695652173914,
+      "pnl": -285.2367,
+      "sharpe": -4.247180620537974,
+      "max_dd": 19.257807710777897
+    },
+    "trend_following": {
+      "trades": 10,
+      "win_rate": 10.0,
+      "pnl": -100.6471,
+      "sharpe": -2.0803817281167314,
+      "max_dd": 4.212750029854105
+    },
+    "breakout": {
+      "trades": 0,
+      "win_rate": 0.0,
+      "pnl": 0.0,
+      "sharpe": 0.0,
+      "max_dd": 0.0
+    },
+    "vwap_scalp": {
+      "trades": 15,
+      "win_rate": 20.0,
+      "pnl": -202.0485,
+      "sharpe": -2.4693198087901984,
+      "max_dd": 4.050624243877137
+    }
+  },
+  "LINKUSDT": {
+    "mean_reversion": {
+      "trades": 52,
+      "win_rate": 25.0,
+      "pnl": -486.7699,
+      "sharpe": -5.034182408106645,
+      "max_dd": 20.95483048560941
+    },
+    "trend_following": {
+      "trades": 11,
+      "win_rate": 9.090909090909092,
+      "pnl": -166.1836,
+      "sharpe": -2.403352776859373,
+      "max_dd": 4.5870970151106665
+    },
+    "breakout": {
+      "trades": 0,
+      "win_rate": 0.0,
+      "pnl": 0.0,
+      "sharpe": 0.0,
+      "max_dd": 0.0
+    },
+    "vwap_scalp": {
+      "trades": 8,
+      "win_rate": 12.5,
+      "pnl": -183.26760000000002,
+      "sharpe": -1.8972337519496187,
+      "max_dd": 2.8720511574452394
+    }
+  },
+  "SOLUSDT": {
+    "mean_reversion": {
+      "trades": 55,
+      "win_rate": 30.909090909090907,
+      "pnl": -433.06669999999997,
+      "sharpe": -5.107510279507232,
+      "max_dd": 20.108072866527017
+    },
+    "trend_following": {
+      "trades": 11,
+      "win_rate": 9.090909090909092,
+      "pnl": -184.397,
+      "sharpe": -2.603907213449533,
+      "max_dd": 4.782961898494705
+    },
+    "breakout": {
+      "trades": 0,
+      "win_rate": 0.0,
+      "pnl": 0.0,
+      "sharpe": 0.0,
+      "max_dd": 0.0
+    },
+    "vwap_scalp": {
+      "trades": 15,
+      "win_rate": 20.0,
+      "pnl": -234.7358,
+      "sharpe": -2.4934705868126503,
+      "max_dd": 4.216849623724957
+    }
+  },
+  "XRPUSDT": {
+    "mean_reversion": {
+      "trades": 60,
+      "win_rate": 18.333333333333332,
+      "pnl": -434.9219,
+      "sharpe": -5.393368433636206,
+      "max_dd": 25.7765184226067
+    },
+    "trend_following": {
+      "trades": 10,
+      "win_rate": 10.0,
+      "pnl": -131.0394,
+      "sharpe": -2.3451299336303655,
+      "max_dd": 4.759387854773886
+    },
+    "breakout": {
+      "trades": 0,
+      "win_rate": 0.0,
+      "pnl": 0.0,
+      "sharpe": 0.0,
+      "max_dd": 0.0
+    },
+    "vwap_scalp": {
+      "trades": 11,
+      "win_rate": 18.181818181818183,
+      "pnl": -157.3343,
+      "sharpe": -2.0231349669710212,
+      "max_dd": 2.8941488130698962
+    }
+  },
+  "ARBUSDT": {
+    "mean_reversion": {
+      "trades": 48,
+      "win_rate": 50.0,
+      "pnl": -238.2149,
+      "sharpe": -3.8523505530926156,
+      "max_dd": 13.567070992005501
+    },
+    "trend_following": {
+      "trades": 17,
+      "win_rate": 11.76470588235294,
+      "pnl": -298.4148,
+      "sharpe": -3.054907934195725,
+      "max_dd": 6.648167037071835
+    },
+    "breakout": {
+      "trades": 0,
+      "win_rate": 0.0,
+      "pnl": 0.0,
+      "sharpe": 0.0,
+      "max_dd": 0.0
+    },
+    "vwap_scalp": {
+      "trades": 20,
+      "win_rate": 25.0,
+      "pnl": -384.1406,
+      "sharpe": -3.0593962464402837,
+      "max_dd": 6.639186475328134
+    }
+  },
+  "ATOMUSDT": {
+    "mean_reversion": {
+      "trades": 47,
+      "win_rate": 38.297872340425535,
+      "pnl": -278.3829,
+      "sharpe": -4.1453495107102505,
+      "max_dd": 17.65458024244788
+    },
+    "trend_following": {
+      "trades": 15,
+      "win_rate": 13.333333333333334,
+      "pnl": -92.8535,
+      "sharpe": -1.8159210396789853,
+      "max_dd": 5.997304402064274
+    },
+    "breakout": {
+      "trades": 0,
+      "win_rate": 0.0,
+      "pnl": 0.0,
+      "sharpe": 0.0,
+      "max_dd": 0.0
+    },
+    "vwap_scalp": {
+      "trades": 5,
+      "win_rate": 40.0,
+      "pnl": -77.9923,
+      "sharpe": -1.0491087722052705,
+      "max_dd": 1.4738204295661492
+    }
+  },
+  "ETCUSDT": {
+    "mean_reversion": {
+      "trades": 50,
+      "win_rate": 46.0,
+      "pnl": -135.3819,
+      "sharpe": -3.9316444921367038,
+      "max_dd": 24.565507952124563
+    },
+    "trend_following": {
+      "trades": 18,
+      "win_rate": 0.0,
+      "pnl": -289.52479999999997,
+      "sharpe": -2.9431708280941486,
+      "max_dd": 10.601429560972047
+    },
+    "breakout": {
+      "trades": 0,
+      "win_rate": 0.0,
+      "pnl": 0.0,
+      "sharpe": 0.0,
+      "max_dd": 0.0
+    },
+    "vwap_scalp": {
+      "trades": 5,
+      "win_rate": 20.0,
+      "pnl": -106.51910000000001,
+      "sharpe": -1.5614379838938248,
+      "max_dd": 1.8214400071439742
+    }
+  },
+  "FILUSDT": {
+    "mean_reversion": {
+      "trades": 47,
+      "win_rate": 29.78723404255319,
+      "pnl": -329.3332,
+      "sharpe": -3.950123541522784,
+      "max_dd": 17.67027706480703
+    },
+    "trend_following": {
+      "trades": 15,
+      "win_rate": 13.333333333333334,
+      "pnl": -161.9653,
+      "sharpe": -2.270018086933672,
+      "max_dd": 6.2767067416432285
+    },
+    "breakout": {
+      "trades": 0,
+      "win_rate": 0.0,
+      "pnl": 0.0,
+      "sharpe": 0.0,
+      "max_dd": 0.0
+    },
+    "vwap_scalp": {
+      "trades": 12,
+      "win_rate": 25.0,
+      "pnl": -262.281,
+      "sharpe": -2.183103089437734,
+      "max_dd": 4.178794883358459
+    }
+  },
+  "LTCUSDT": {
+    "mean_reversion": {
+      "trades": 65,
+      "win_rate": 20.0,
+      "pnl": -446.985,
+      "sharpe": -5.663904832199471,
+      "max_dd": 25.688938503338647
+    },
+    "trend_following": {
+      "trades": 13,
+      "win_rate": 7.6923076923076925,
+      "pnl": -178.2712,
+      "sharpe": -2.6383409860459923,
+      "max_dd": 5.497199453387911
+    },
+    "breakout": {
+      "trades": 0,
+      "win_rate": 0.0,
+      "pnl": 0.0,
+      "sharpe": 0.0,
+      "max_dd": 0.0
+    },
+    "vwap_scalp": {
+      "trades": 2,
+      "win_rate": 0.0,
+      "pnl": -25.2739,
+      "sharpe": -1.1411070016918854,
+      "max_dd": 0.5684969238418671
+    }
+  },
+  "OPUSDT": {
+    "mean_reversion": {
+      "trades": 52,
+      "win_rate": 32.69230769230769,
+      "pnl": -330.2351,
+      "sharpe": -4.440461892587547,
+      "max_dd": 19.10223515462356
+    },
+    "trend_following": {
+      "trades": 15,
+      "win_rate": 6.666666666666667,
+      "pnl": -205.4132,
+      "sharpe": -2.5533238954629174,
+      "max_dd": 6.586719858289417
+    },
+    "breakout": {
+      "trades": 0,
+      "win_rate": 0.0,
+      "pnl": 0.0,
+      "sharpe": 0.0,
+      "max_dd": 0.0
+    },
+    "vwap_scalp": {
+      "trades": 19,
+      "win_rate": 15.789473684210526,
+      "pnl": -139.1399,
+      "sharpe": -2.325904468642395,
+      "max_dd": 3.737945826850373
+    }
+  },
+  "SUIUSDT": {
+    "mean_reversion": {
+      "trades": 57,
+      "win_rate": 40.35087719298245,
+      "pnl": -574.8075,
+      "sharpe": -4.695480399182899,
+      "max_dd": 16.96103854562978
+    },
+    "trend_following": {
+      "trades": 9,
+      "win_rate": 11.11111111111111,
+      "pnl": -175.0954,
+      "sharpe": -1.7775992758610117,
+      "max_dd": 3.177198677444376
+    },
+    "breakout": {
+      "trades": 0,
+      "win_rate": 0.0,
+      "pnl": 0.0,
+      "sharpe": 0.0,
+      "max_dd": 0.0
+    },
+    "vwap_scalp": {
+      "trades": 4,
+      "win_rate": 25.0,
+      "pnl": -52.2397,
+      "sharpe": -1.2955944462608329,
+      "max_dd": 1.1746047157376234
+    }
+  },
+  "TIAUSDT": {
+    "mean_reversion": {
+      "trades": 45,
+      "win_rate": 46.666666666666664,
+      "pnl": -160.8432,
+      "sharpe": -2.961257956446665,
+      "max_dd": 10.632769956636858
+    },
+    "trend_following": {
+      "trades": 12,
+      "win_rate": 8.333333333333332,
+      "pnl": -290.338,
+      "sharpe": -2.6949295099476385,
+      "max_dd": 4.893541639168107
+    },
+    "breakout": {
+      "trades": 0,
+      "win_rate": 0.0,
+      "pnl": 0.0,
+      "sharpe": 0.0,
+      "max_dd": 0.0
+    },
+    "vwap_scalp": {
+      "trades": 7,
+      "win_rate": 14.285714285714285,
+      "pnl": -54.8069,
+      "sharpe": -1.488883514491543,
+      "max_dd": 1.6373192547336477
+    }
+  },
+  "UNIUSDT": {
+    "mean_reversion": {
+      "trades": 50,
+      "win_rate": 46.0,
+      "pnl": -217.3457,
+      "sharpe": -4.124423470423822,
+      "max_dd": 16.98014551319664
+    },
+    "trend_following": {
+      "trades": 12,
+      "win_rate": 0.0,
+      "pnl": -215.8953,
+      "sharpe": -2.722535055457923,
+      "max_dd": 5.539125175580921
+    },
+    "breakout": {
+      "trades": 0,
+      "win_rate": 0.0,
+      "pnl": 0.0,
+      "sharpe": 0.0,
+      "max_dd": 0.0
+    },
+    "vwap_scalp": {
+      "trades": 13,
+      "win_rate": 30.76923076923077,
+      "pnl": -187.437,
+      "sharpe": -2.3393681046835124,
+      "max_dd": 3.620778239210995
+    }
+  }
+}

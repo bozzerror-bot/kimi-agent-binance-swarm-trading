@@ -1,0 +1,18 @@
+# AI Trader — Python Dependencies
+# Install with: pip install -r requirements.txt
+
+# Binance API client (testnet + live)
+python-binance==1.0.27
+
+# Data processing and numerical computing
+pandas==2.2.2
+numpy==1.26.4
+
+# Async HTTP client (used by market data feeds)
+aiohttp==3.9.5
+
+# Environment variable management
+python-dotenv==1.0.1
+
+# WebSocket support for real-time market data
+websockets==12.0
