@@ -53,3 +53,5 @@ trading.log
 
 # Large data files
 *.csv
+
+node_modules_backup/

@@ -1,549 +1,97 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { User, Brain, Settings2, Zap, Target, Clock, RefreshCw, Check, AlertTriangle, RotateCcw, Globe } from 'lucide-react';
-import { COINS } from '../hooks/useBinancePrices';
-import { useTradingStore } from '../store/tradingStore';
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 12 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.06, duration: 0.35, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
-  }),
-};
-
-interface UserSettings {
-  selectedCoins: string[];
-  apiKey: string;
-  apiSecret: string;
-  testnet: boolean;
-  autoTrade: boolean;
-  riskPerTrade: number;
-  maxPositions: number;
-  leverage: number;
-  stopLoss: number;
-  takeProfit: number;
-  timeframes: string[];
-  personality: {
-    riskTolerance: number;
-    confidence: number;
-    patience: number;
-    adaptability: number;
-  };
-}
-
-const defaultSettings: UserSettings = {
-  selectedCoins: COINS.slice(0, 5),
-  apiKey: '',
-  apiSecret: '',
-  testnet: true,
-  autoTrade: false,
-  riskPerTrade: 2,
-  maxPositions: 3,
-  leverage: 5,
-  stopLoss: 1.5,
-  takeProfit: 3,
-  timeframes: ['5m', '15m', '1h'],
-  personality: {
-    riskTolerance: 0.72,
-    confidence: 0.65,
-    patience: 0.80,
-    adaptability: 0.60,
-  },
-};
+import { useAlexStore, COINS } from '@/store/useAlexStore';
+import { User, Brain, Zap, Target, Clock, RefreshCw, Key, Check, AlertTriangle, RotateCcw, Globe } from 'lucide-react';
 
 export default function Settings() {
-  const setTradingEnabled = useTradingStore((s) => s.setTradingEnabled);
-  const [settings, setSettings] = useState<UserSettings>(() => {
-    try {
-      const saved = localStorage.getItem('alex_settings');
-      return saved ? { ...defaultSettings, ...JSON.parse(saved) } : defaultSettings;
-    } catch {
-      return defaultSettings;
-    }
-  });
-  const [saved, setSaved] = useState(false);
-  const [activeTab, setActiveTab] = useState<'general' | 'trading' | 'personality' | 'api'>('general');
+  const { settings, updateSettings, mood, resetAll } = useAlexStore();
+  const [apiKey, setApiKey] = useState(settings.apiKey);
+  const [apiSecret, setApiSecret] = useState(settings.apiSecret);
+  const [conn, setConn] = useState<'idle'|'testing'|'success'|'error'>('idle');
+  const [confirmReset, setConfirmReset] = useState(false);
 
-  const persist = useCallback((next: UserSettings) => {
-    setSettings(next);
-    localStorage.setItem('alex_settings', JSON.stringify(next));
-    setSaved(true);
-    setTimeout(() => setSaved(false), 1500);
-  }, []);
-
-  const toggleCoin = useCallback(
-    (symbol: string) => {
-      const next = {
-        ...settings,
-        selectedCoins: settings.selectedCoins.includes(symbol)
-          ? settings.selectedCoins.filter((s) => s !== symbol)
-          : [...settings.selectedCoins, symbol],
-      };
-      persist(next);
-    },
-    [settings, persist]
-  );
-
-  const updateField = useCallback(
-    <K extends keyof UserSettings>(key: K, value: UserSettings[K]) => {
-      persist({ ...settings, [key]: value });
-    },
-    [settings, persist]
-  );
-
-  const updatePersonality = useCallback(
-    (key: keyof UserSettings['personality'], value: number) => {
-      persist({
-        ...settings,
-        personality: { ...settings.personality, [key]: value },
-      });
-    },
-    [settings, persist]
-  );
-
-  const resetAll = useCallback(() => {
-    if (window.confirm('Reset all settings to defaults?')) {
-      setSettings(defaultSettings);
-      localStorage.removeItem('alex_settings');
-    }
-  }, []);
-
-  const tabs = [
-    { key: 'general' as const, label: 'General', icon: <Settings2 size={15} /> },
-    { key: 'trading' as const, label: 'Trading', icon: <Zap size={15} /> },
-    { key: 'personality' as const, label: 'Personality', icon: <Brain size={15} /> },
-    { key: 'api' as const, label: 'API', icon: <Globe size={15} /> },
-  ];
+  const testConn = async () => { setConn('testing'); try { const r = await fetch('https://testnet.binancefuture.com/fapi/v1/time'); setConn(r.ok ? 'success' : 'error'); if (r.ok) updateSettings({ apiKey, apiSecret }); } catch { setConn('error'); } };
+  const toggleCoin = (sym: string) => { const next = settings.selectedCoins.includes(sym) ? settings.selectedCoins.filter(c => c !== sym) : [...settings.selectedCoins, sym]; updateSettings({ selectedCoins: next }); };
 
   return (
-    <div className="min-h-[calc(100dvh-56px-40px)] p-6">
-      <div className="max-w-5xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-white">Settings</h1>
-            <p className="text-sm text-[rgba(255,255,255,0.5)] mt-0.5">
-              Configure Alex trading behaviour and API credentials
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            {saved && (
-              <motion.span
-                initial={{ opacity: 0, x: 8 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="flex items-center gap-1 text-xs font-medium text-[#2FFF6B]"
-              >
-                <Check size={13} /> Saved
-              </motion.span>
-            )}
-            <button
-              onClick={resetAll}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-[rgba(255,255,255,0.5)] hover:text-white transition-colors"
-              style={{ backgroundColor: '#13131F' }}
-            >
-              <RotateCcw size={12} /> Reset
-            </button>
-          </div>
-        </div>
+    <div className="min-h-screen pb-8 px-3 sm:px-4 max-w-[1440px] mx-auto">
+      <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1">Settings</h1>
+      <p className="text-xs sm:text-sm text-gray-500 mb-5">Configure Alex&apos;s personality, sizing, and API</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-[#13131e] border border-white/[0.04] rounded-2xl p-5">
+          <div className="flex items-center gap-2 mb-4"><User size={16} className="text-blue-400" /><h3 className="text-white font-semibold text-sm">Identity</h3></div>
+          <label className="text-[10px] text-gray-400 mb-1 block">Name</label>
+          <input type="text" value={settings.name} onChange={e => updateSettings({ name: e.target.value })} className="w-full bg-[#0a0a0f] border border-white/[0.06] rounded-lg px-3 py-2 text-white text-sm font-mono focus:border-blue-500 focus:outline-none" />
+          <div className="mt-3 flex items-center gap-2"><span className="text-xl">{mood === 'sharp' ? '⚡' : mood === 'focused' ? '🎯' : mood === 'confident' ? '💪' : mood === 'greedy' ? '🤑' : mood === 'frustrated' ? '😤' : mood === 'fearful' ? '😰' : '😐'}</span><span className="text-xs text-gray-400 capitalize">{mood}</span></div>
+        </motion.div>
 
-        {/* Tabs */}
-        <div className="flex items-center gap-1 p-1 rounded-xl" style={{ backgroundColor: '#13131F' }}>
-          {tabs.map((t) => (
-            <button
-              key={t.key}
-              onClick={() => setActiveTab(t.key)}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex-1 justify-center"
-              style={{
-                backgroundColor: activeTab === t.key ? '#1E1E2D' : 'transparent',
-                color: activeTab === t.key ? '#FFFFFF' : 'rgba(255,255,255,0.5)',
-              }}
-            >
-              {t.icon} {t.label}
-            </button>
-          ))}
-        </div>
-
-        {/* ─── General Tab ─── */}
-        {activeTab === 'general' && (
-          <div className="space-y-4">
-            {/* Coin Selection */}
-            <motion.div
-              custom={0}
-              variants={cardVariants}
-              initial="hidden"
-              animate="visible"
-              className="rounded-xl border p-5"
-              style={{ backgroundColor: '#13131F', borderColor: 'rgba(255,255,255,0.06)' }}
-            >
-              <div className="flex items-center gap-2 mb-4">
-                <Target size={16} className="text-[#2FA3FF]" />
-                <h3 className="text-sm font-semibold text-white">Active Coins</h3>
-                <span className="text-xs text-[rgba(255,255,255,0.4)] ml-auto">
-                  {settings.selectedCoins.length} selected
-                </span>
-              </div>
-              <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-5 gap-2">
-                {COINS.map((symbol) => {
-                  const active = settings.selectedCoins.includes(symbol);
-                  return (
-                    <button
-                      key={symbol}
-                      onClick={() => toggleCoin(symbol)}
-                      className="relative px-3 py-2.5 rounded-lg text-xs font-semibold transition-all duration-200 border"
-                      style={{
-                        backgroundColor: active ? 'rgba(47,255,107,0.08)' : '#0C0C12',
-                        borderColor: active ? 'rgba(47,255,107,0.25)' : 'rgba(255,255,255,0.06)',
-                        color: active ? '#2FFF6B' : 'rgba(255,255,255,0.6)',
-                      }}
-                    >
-                      {symbol.replace('USDT', '')}
-                      {active && (
-                        <Check
-                          size={10}
-                          className="absolute top-1 right-1"
-                          style={{ color: '#2FFF6B' }}
-                        />
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            </motion.div>
-
-            {/* Timeframes */}
-            <motion.div
-              custom={1}
-              variants={cardVariants}
-              initial="hidden"
-              animate="visible"
-              className="rounded-xl border p-5"
-              style={{ backgroundColor: '#13131F', borderColor: 'rgba(255,255,255,0.06)' }}
-            >
-              <div className="flex items-center gap-2 mb-4">
-                <Clock size={16} className="text-[#FFAA00]" />
-                <h3 className="text-sm font-semibold text-white">Timeframes</h3>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {['1m', '5m', '15m', '1h', '4h', '1d'].map((tf) => {
-                  const active = settings.timeframes.includes(tf);
-                  return (
-                    <button
-                      key={tf}
-                      onClick={() =>
-                        updateField(
-                          'timeframes',
-                          active
-                            ? settings.timeframes.filter((t) => t !== tf)
-                            : [...settings.timeframes, tf]
-                        )
-                      }
-                      className="px-4 py-2 rounded-lg text-xs font-medium border transition-all duration-200"
-                      style={{
-                        backgroundColor: active ? 'rgba(255,170,0,0.08)' : '#0C0C12',
-                        borderColor: active ? 'rgba(255,170,0,0.25)' : 'rgba(255,255,255,0.06)',
-                        color: active ? '#FFAA00' : 'rgba(255,255,255,0.5)',
-                      }}
-                    >
-                      {tf}
-                    </button>
-                  );
-                })}
-              </div>
-            </motion.div>
-
-            {/* Auto-trade toggle */}
-            <motion.div
-              custom={2}
-              variants={cardVariants}
-              initial="hidden"
-              animate="visible"
-              className="rounded-xl border p-5 flex items-center justify-between"
-              style={{ backgroundColor: '#13131F', borderColor: 'rgba(255,255,255,0.06)' }}
-            >
-              <div className="flex items-center gap-3">
-                <RefreshCw size={16} className="text-[#2FA3FF]" />
-                <div>
-                  <h3 className="text-sm font-semibold text-white">Auto-Trading</h3>
-                  <p className="text-xs text-[rgba(255,255,255,0.4)]">
-                    Allow Alex to execute trades automatically
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={() => {
-                  const next = !settings.autoTrade;
-                  updateField('autoTrade', next);
-                  setTradingEnabled(next);
-                }}
-                className="relative w-11 h-6 rounded-full transition-colors duration-200"
-                style={{
-                  backgroundColor: settings.autoTrade ? '#2FFF6B' : 'rgba(255,255,255,0.12)',
-                }}
-              >
-                <span
-                  className="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-transform duration-200"
-                  style={{
-                    transform: settings.autoTrade ? 'translateX(20px)' : 'translateX(0)',
-                  }}
-                />
-              </button>
-            </motion.div>
-          </div>
-        )}
-
-        {/* ─── Trading Tab ─── */}
-        {activeTab === 'trading' && (
-          <div className="space-y-4">
-            {(
-              [
-                {
-                  key: 'riskPerTrade' as const,
-                  label: 'Risk Per Trade',
-                  desc: 'Maximum % of balance risked per trade',
-                  icon: <AlertTriangle size={16} className="text-[#FF4444]" />,
-                  min: 0.5,
-                  max: 10,
-                  step: 0.5,
-                  unit: '%',
-                },
-                {
-                  key: 'maxPositions' as const,
-                  label: 'Max Positions',
-                  desc: 'Maximum concurrent open positions',
-                  icon: <Target size={16} className="text-[#2FA3FF]" />,
-                  min: 1,
-                  max: 10,
-                  step: 1,
-                  unit: '',
-                },
-                {
-                  key: 'leverage' as const,
-                  label: 'Leverage',
-                  desc: 'Default leverage for futures trades',
-                  icon: <Zap size={16} className="text-[#FFAA00]" />,
-                  min: 1,
-                  max: 125,
-                  step: 1,
-                  unit: 'x',
-                },
-                {
-                  key: 'stopLoss' as const,
-                  label: 'Stop Loss',
-                  desc: 'Default stop loss distance %',
-                  icon: <AlertTriangle size={16} className="text-[#FF4444]" />,
-                  min: 0.5,
-                  max: 10,
-                  step: 0.5,
-                  unit: '%',
-                },
-                {
-                  key: 'takeProfit' as const,
-                  label: 'Take Profit',
-                  desc: 'Default take profit distance %',
-                  icon: <Target size={16} className="text-[#2FFF6B]" />,
-                  min: 1,
-                  max: 20,
-                  step: 0.5,
-                  unit: '%',
-                },
-              ] as const
-            ).map((field, i) => (
-              <motion.div
-                key={field.key}
-                custom={i}
-                variants={cardVariants}
-                initial="hidden"
-                animate="visible"
-                className="rounded-xl border p-5"
-                style={{ backgroundColor: '#13131F', borderColor: 'rgba(255,255,255,0.06)' }}
-              >
-                <div className="flex items-center gap-2 mb-3">
-                  {field.icon}
-                  <div>
-                    <h3 className="text-sm font-semibold text-white">{field.label}</h3>
-                    <p className="text-xs text-[rgba(255,255,255,0.4)]">{field.desc}</p>
-                  </div>
-                  <span className="ml-auto text-sm font-bold text-white">
-                    {settings[field.key]}
-                    {field.unit}
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min={field.min}
-                  max={field.max}
-                  step={field.step}
-                  value={settings[field.key]}
-                  onChange={(e) => updateField(field.key, parseFloat(e.target.value))}
-                  className="w-full accent-[#2FA3FF]"
-                />
-              </motion.div>
-            ))}
-          </div>
-        )}
-
-        {/* ─── Personality Tab ─── */}
-        {activeTab === 'personality' && (
-          <div className="space-y-4">
-            {(
-              [
-                {
-                  key: 'riskTolerance' as const,
-                  label: 'Risk Tolerance',
-                  desc: 'Higher = more aggressive position sizing',
-                  color: '#FF4444',
-                },
-                {
-                  key: 'confidence' as const,
-                  label: 'Confidence',
-                  desc: 'Higher = takes more trades with lower confirmation',
-                  color: '#2FA3FF',
-                },
-                {
-                  key: 'patience' as const,
-                  label: 'Patience',
-                  desc: 'Higher = waits for better setups, fewer trades',
-                  color: '#FFAA00',
-                },
-                {
-                  key: 'adaptability' as const,
-                  label: 'Adaptability',
-                  desc: 'Higher = switches strategies faster on regime change',
-                  color: '#2FFF6B',
-                },
-              ] as const
-            ).map((trait, i) => (
-              <motion.div
-                key={trait.key}
-                custom={i}
-                variants={cardVariants}
-                initial="hidden"
-                animate="visible"
-                className="rounded-xl border p-5"
-                style={{ backgroundColor: '#13131F', borderColor: 'rgba(255,255,255,0.06)' }}
-              >
-                <div className="flex items-center gap-2 mb-3">
-                  <Brain size={16} style={{ color: trait.color }} />
-                  <div>
-                    <h3 className="text-sm font-semibold text-white">{trait.label}</h3>
-                    <p className="text-xs text-[rgba(255,255,255,0.4)]">{trait.desc}</p>
-                  </div>
-                  <span className="ml-auto text-sm font-bold text-white">
-                    {Math.round(settings.personality[trait.key] * 100)}%
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min={0}
-                  max={1}
-                  step={0.05}
-                  value={settings.personality[trait.key]}
-                  onChange={(e) => updatePersonality(trait.key, parseFloat(e.target.value))}
-                  className="w-full"
-                  style={{ accentColor: trait.color }}
-                />
-              </motion.div>
-            ))}
-          </div>
-        )}
-
-        {/* ─── API Tab ─── */}
-        {activeTab === 'api' && (
-          <div className="space-y-4">
-            <motion.div
-              custom={0}
-              variants={cardVariants}
-              initial="hidden"
-              animate="visible"
-              className="rounded-xl border p-5"
-              style={{ backgroundColor: '#13131F', borderColor: 'rgba(255,255,255,0.06)' }}
-            >
-              <div className="flex items-center gap-2 mb-4">
-                <Globe size={16} className="text-[#2FA3FF]" />
-                <h3 className="text-sm font-semibold text-white">Binance API Credentials</h3>
-              </div>
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-xs font-medium text-[rgba(255,255,255,0.5)] mb-1.5">
-                    API Key
-                  </label>
-                  <input
-                    type="password"
-                    value={settings.apiKey}
-                    onChange={(e) => updateField('apiKey', e.target.value)}
-                    placeholder="Enter your Binance API key"
-                    className="w-full px-3 py-2.5 rounded-lg text-sm text-white placeholder-[rgba(255,255,255,0.25)] outline-none border focus:border-[rgba(47,163,255,0.4)] transition-colors"
-                    style={{ backgroundColor: '#0C0C12', borderColor: 'rgba(255,255,255,0.08)' }}
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-[rgba(255,255,255,0.5)] mb-1.5">
-                    API Secret
-                  </label>
-                  <input
-                    type="password"
-                    value={settings.apiSecret}
-                    onChange={(e) => updateField('apiSecret', e.target.value)}
-                    placeholder="Enter your Binance API secret"
-                    className="w-full px-3 py-2.5 rounded-lg text-sm text-white placeholder-[rgba(255,255,255,0.25)] outline-none border focus:border-[rgba(47,163,255,0.4)] transition-colors"
-                    style={{ backgroundColor: '#0C0C12', borderColor: 'rgba(255,255,255,0.08)' }}
-                  />
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Testnet toggle */}
-            <motion.div
-              custom={1}
-              variants={cardVariants}
-              initial="hidden"
-              animate="visible"
-              className="rounded-xl border p-5 flex items-center justify-between"
-              style={{ backgroundColor: '#13131F', borderColor: 'rgba(255,255,255,0.06)' }}
-            >
-              <div className="flex items-center gap-3">
-                <User size={16} className="text-[#2FFF6B]" />
-                <div>
-                  <h3 className="text-sm font-semibold text-white">Testnet Mode</h3>
-                  <p className="text-xs text-[rgba(255,255,255,0.4)]">
-                    Use Binance testnet for paper trading
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={() => updateField('testnet', !settings.testnet)}
-                className="relative w-11 h-6 rounded-full transition-colors duration-200"
-                style={{
-                  backgroundColor: settings.testnet ? '#2FFF6B' : 'rgba(255,255,255,0.12)',
-                }}
-              >
-                <span
-                  className="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-transform duration-200"
-                  style={{
-                    transform: settings.testnet ? 'translateX(20px)' : 'translateX(0)',
-                  }}
-                />
-              </button>
-            </motion.div>
-
-            <div
-              className="rounded-xl border p-4 flex items-start gap-3"
-              style={{
-                backgroundColor: 'rgba(255,170,0,0.05)',
-                borderColor: 'rgba(255,170,0,0.15)',
-              }}
-            >
-              <AlertTriangle size={16} className="text-[#FFAA00] mt-0.5 shrink-0" />
-              <p className="text-xs text-[rgba(255,255,255,0.5)] leading-relaxed">
-                API keys are stored locally in your browser and are never sent to any server.
-                Always use testnet mode when testing new strategies.
-              </p>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-[#13131e] border border-white/[0.04] rounded-2xl p-5">
+          <div className="flex items-center gap-2 mb-4"><Brain size={16} className="text-purple-400" /><h3 className="text-white font-semibold text-sm">Personality</h3></div>
+          {[{ k: 'riskTolerance', l: 'Risk', i: <Zap size={12} />, lo: 'Safe', hi: 'Aggro' }, { k: 'confidence', l: 'Confidence', i: <Target size={12} />, lo: 'Doubt', hi: 'Bold' }, { k: 'patience', l: 'Patience', i: <Clock size={12} />, lo: 'Fast', hi: 'Patient' }, { k: 'adaptability', l: 'Adapt', i: <RefreshCw size={12} />, lo: 'Stubborn', hi: 'Flexible' }].map(s => (
+            <div key={s.k} className="mb-3">
+              <div className="flex justify-between text-[10px] mb-1"><span className="text-gray-400 flex items-center gap-1">{s.i} {s.l}</span><span className="font-mono text-emerald-400">{(settings[s.k as keyof typeof settings] as number)}%</span></div>
+              <input type="range" min={1} max={100} value={settings[s.k as keyof typeof settings] as number} onChange={e => updateSettings({ [s.k]: parseInt(e.target.value) })} className="w-full h-1 bg-[#0a0a0f] rounded-full appearance-none cursor-pointer accent-emerald-500" />
+              <div className="flex justify-between text-[9px] text-gray-600 mt-0.5"><span>{s.lo}</span><span>{s.hi}</span></div>
             </div>
+          ))}
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="bg-[#13131e] border border-white/[0.04] rounded-2xl p-5">
+          <div className="flex items-center gap-2 mb-4"><Brain size={16} className="text-emerald-400" /><h3 className="text-white font-semibold text-sm">Trading</h3></div>
+          <label className="text-[10px] text-gray-400 mb-1 block">Entry Size (USDT)</label>
+          <div className="flex gap-2 mb-3">
+            {[100, 150, 200].map(sz => (
+              <button key={sz} onClick={() => updateSettings({ entrySize: sz })} className={`px-4 py-2 rounded-lg text-xs font-mono font-bold transition-all ${settings.entrySize === sz ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-[#0a0a0f] text-gray-400 border border-white/[0.04]'}`}>${sz}</button>
+            ))}
+          </div>
+          <label className="text-[10px] text-gray-400 mb-1 block">Leverage</label>
+          <div className="flex gap-2 mb-3">
+            {[10, 15, 20].map(l => (
+              <button key={l} onClick={() => updateSettings({ maxLeverage: l })} className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${settings.maxLeverage === l ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-[#0a0a0f] text-gray-400 border border-white/[0.04]'}`}>{l}x</button>
+            ))}
+          </div>
+          <label className="text-[10px] text-gray-400 mb-1 block">Interval</label>
+          <div className="flex gap-2 mb-3">
+            {['1m', '5m', '15m', '1h'].map(int => (
+              <button key={int} onClick={() => updateSettings({ interval: int })} className={`px-2.5 py-1 rounded-lg text-[10px] font-mono transition-all ${settings.interval === int ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-[#0a0a0f] text-gray-400 border border-white/[0.04]'}`}>{int}</button>
+            ))}
+          </div>
+          <label className="text-[10px] text-gray-400 mb-1 block">Coins ({settings.selectedCoins.length}/20)</label>
+          <div className="grid grid-cols-5 gap-1.5">
+            {COINS.map(sym => (
+              <button key={sym} onClick={() => toggleCoin(sym)} className={`flex items-center justify-between px-1.5 py-1 rounded-lg text-[9px] font-mono border transition-all ${settings.selectedCoins.includes(sym) ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-[#0a0a0f] text-gray-600 border-white/[0.03]'}`}>{sym.replace('USDT', '')} {settings.selectedCoins.includes(sym) && <Check size={8} />}</button>
+            ))}
+          </div>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="bg-[#13131e] border border-white/[0.04] rounded-2xl p-5">
+          <div className="flex items-center gap-2 mb-4"><Key size={16} className="text-yellow-400" /><h3 className="text-white font-semibold text-sm">Binance API</h3></div>
+          <label className="text-[10px] text-gray-400 mb-1 block">API Key</label>
+          <input type="password" value={apiKey} onChange={e => setApiKey(e.target.value)} placeholder="Testnet API key" className="w-full bg-[#0a0a0f] border border-white/[0.06] rounded-lg px-3 py-2 text-white text-sm font-mono focus:border-yellow-500 focus:outline-none placeholder:text-gray-700 mb-2" />
+          <label className="text-[10px] text-gray-400 mb-1 block">Secret</label>
+          <input type="password" value={apiSecret} onChange={e => setApiSecret(e.target.value)} placeholder="API secret" className="w-full bg-[#0a0a0f] border border-white/[0.06] rounded-lg px-3 py-2 text-white text-sm font-mono focus:border-yellow-500 focus:outline-none placeholder:text-gray-700 mb-3" />
+          <div className="flex items-center gap-2 mb-2">
+            <button onClick={testConn} disabled={conn === 'testing'} className="px-3 py-1.5 bg-yellow-500/20 text-yellow-400 rounded-lg text-[10px] font-semibold border border-yellow-500/30 disabled:opacity-50">{conn === 'testing' ? '...' : conn === 'success' ? 'Connected' : 'Test'}</button>
+            <button onClick={() => updateSettings({ apiKey, apiSecret })} className="px-3 py-1.5 bg-emerald-500/20 text-emerald-400 rounded-lg text-[10px] font-semibold border border-emerald-500/30">Save</button>
+          </div>
+          {conn === 'success' && <p className="text-[10px] text-emerald-400 flex items-center gap-1"><Check size={10} /> Connected</p>}
+          {conn === 'error' && <p className="text-[10px] text-red-400">Failed</p>}
+          <p className="text-[9px] text-gray-600 mt-2 flex items-center gap-1"><Globe size={8} /> <a href="https://testnet.binancefuture.com/" target="_blank" rel="noreferrer" className="text-blue-400 underline">testnet.binancefuture.com</a></p>
+        </motion.div>
+      </div>
+
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="mt-5 bg-red-500/5 border border-red-500/20 rounded-2xl p-5">
+        <div className="flex items-center gap-2 mb-3"><AlertTriangle size={14} className="text-red-400" /><h3 className="text-red-400 font-semibold text-xs">Danger</h3></div>
+        {!confirmReset ? (
+          <button onClick={() => setConfirmReset(true)} className="flex items-center gap-2 px-3 py-2 bg-red-500/10 text-red-400 rounded-lg text-[10px] font-semibold border border-red-500/20 hover:bg-red-500/20"><RotateCcw size={12} /> Reset All</button>
+        ) : (
+          <div className="flex items-center gap-3">
+            <p className="text-[10px] text-red-400">Delete everything?</p>
+            <button onClick={() => { resetAll(); setConfirmReset(false); }} className="px-3 py-1 bg-red-500 text-white rounded text-[10px] font-bold">Yes</button>
+            <button onClick={() => setConfirmReset(false)} className="px-3 py-1 bg-[#0a0a0f] text-gray-400 rounded text-[10px]">No</button>
           </div>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 }
